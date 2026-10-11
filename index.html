@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetworkSwitch Exam Tutor | Cybersecurity Network Studies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darknavy: '#0b1329',
+                        carddark: '#131f40',
+                        accentcyan: '#06b6d4',
+                        accentblue: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-darknavy text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-carddark border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-accentcyan/10 p-2 rounded-lg border border-accentcyan/30 text-accentcyan font-bold text-xl">NS</div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-white">NetworkSwitch <span class="text-accentcyan text-xs uppercase px-2 py-0.5 bg-accentcyan/20 rounded-full ml-1">Exam Tutor</span></h1>
+                    <p class="text-xs text-slate-400">Networks & Switching Revision for Cybersecurity</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-1">
+                <button onclick="switchTab('dashboard')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition active" data-tab="dashboard">Dashboard</button>
+                <button onclick="switchTab('modules')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" data-tab="modules">Learning Modules</button>
+                <button onclick="switchTab('calculators')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" data-tab="calculators">Calculators & Tools</button>
+                <button onclick="switchTab('exam')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" data-tab="exam">Exam Simulator</button>
+                <button onclick="switchTab('checklist')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" data-tab="checklist">Revision Checklist</button>
+            </nav>
+            <div class="flex items-center space-x-2">
+                <span id="overall-score-badge" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-full text-slate-300">Progress: 0%</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sub-navigation Bar -->
+    <div class="md:hidden bg-carddark border-b border-slate-800 flex overflow-x-auto px-2 py-2 space-x-1 shrink-0">
+        <button onclick="switchTab('dashboard')" class="nav-btn px-3 py-1.5 rounded text-xs whitespace-nowrap active" data-tab="dashboard">Dashboard</button>
+        <button onclick="switchTab('modules')" class="nav-btn px-3 py-1.5 rounded text-xs whitespace-nowrap" data-tab="modules">Modules</button>
+        <button onclick="switchTab('calculators')" class="nav-btn px-3 py-1.5 rounded text-xs whitespace-nowrap" data-tab="calculators">Tools</button>
+        <button onclick="switchTab('exam')" class="nav-btn px-3 py-1.5 rounded text-xs whitespace-nowrap" data-tab="exam">Exam Sim</button>
+        <button onclick="switchTab('checklist')" class="nav-btn px-3 py-1.5 rounded text-xs whitespace-nowrap" data-tab="checklist">Checklist</button>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- 1. DASHBOARD TAB -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <div class="bg-gradient-to-r from-carddark to-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-1">Welcome back, Security Analyst!</h2>
+                    <p class="text-sm text-slate-400">Master Data Link layers, VLSM subnetting, TCP mechanics, and STP configurations for your exams.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="switchTab('modules')" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-semibold px-4 py-2 rounded-xl text-sm transition shadow-lg shadow-cyan-500/20">Continue Learning</button>
+                    <button onclick="switchTab('exam')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold px-4 py-2 rounded-xl text-sm transition">Take Exam Test</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-carddark border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-slate-400 text-xs uppercase font-semibold mb-1">Overall Mastery</div>
+                    <div id="stat-mastery" class="text-3xl font-bold text-accentcyan">0%</div>
+                    <div class="text-xs text-slate-500 mt-2">Based on completed practice questions</div>
+                </div>
+                <div class="bg-carddark border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-slate-400 text-xs uppercase font-semibold mb-1">Questions Answered</div>
+                    <div id="stat-answered" class="text-3xl font-bold text-white">0</div>
+                    <div class="text-xs text-slate-500 mt-2">Across all 8 core modules</div>
+                </div>
+                <div class="bg-carddark border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-slate-400 text-xs uppercase font-semibold mb-1">Exam Simulations</div>
+                    <div id="stat-exams" class="text-3xl font-bold text-white">0</div>
+                    <div class="text-xs text-slate-500 mt-2">Completed mock assessments</div>
+                </div>
+                <div class="bg-carddark border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-slate-400 text-xs uppercase font-semibold mb-1">Local Storage</div>
+                    <div class="text-3xl font-bold text-emerald-400">Active</div>
+                    <div class="text-xs text-slate-500 mt-2">Auto-saves locally in browser</div>
+                </div>
+            </div>
+
+            <!-- Weak-Topic Recommendations & Quick Access -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-carddark border border-slate-800 p-6 rounded-2xl">
+                    <h3 class="text-lg font-semibold text-white mb-4">Syllabus Overview & Progress</h3>
+                    <div id="module-progress-list" class="space-y-3">
+                        <!-- Dynamically populated module progress rows -->
+                    </div>
+                </div>
+                <div class="bg-carddark border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Weak-Topic Focus</h3>
+                        <p class="text-xs text-slate-400 mb-4">Targeted practice recommendations derived from your lowest scoring module areas.</p>
+                        <div id="weak-topic-recommendation" class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-sm text-slate-300">
+                            Complete practice questions across modules to generate personalised weak-topic guidance.
+                        </div>
+                    </div>
+                    <button onclick="resetLocalStorageData()" class="mt-6 text-xs text-rose-400 hover:text-rose-300 underline text-left">Reset Local Progress Data</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. LEARNING MODULES TAB -->
+        <section id="tab-modules" class="tab-content hidden space-y-6">
+            <div id="module-selection-view" class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Networks & Switching Learning Modules</h2>
+                        <p class="text-sm text-slate-400">Select a module to review beginner-friendly explanations, analogies, diagrams, and guided practice.</p>
+                    </div>
+                </div>
+                <div id="modules-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Single Module Detailed View -->
+            <div id="module-detail-view" class="hidden space-y-6">
+                <button onclick="backToModulesList()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition">&larr; Back to Modules</button>
+                <div id="module-content-container" class="bg-carddark border border-slate-800 p-6 md:p-8 rounded-2xl space-y-6">
+                    <!-- Dynamic lesson content injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. CALCULATORS & TOOLS TAB -->
+        <section id="tab-calculators" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1">Interactive Network Calculators & Simulators</h2>
+                <p class="text-sm text-slate-400">Test parameters, verify calculations, and simulate networking protocols with full step-by-step logic.</p>
+            </div>
+
+            <!-- Tool Switcher Buttons -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+                <button onclick="switchTool('subnet')" class="tool-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-accentcyan text-darknavy transition" data-tool="subnet">IPv4 Subnet Calculator</button>
+                <button onclick="switchTool('vlsm')" class="tool-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-tool="vlsm">VLSM Allocator</button>
+                <button onclick="switchTool('tcp')" class="tool-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-tool="tcp">TCP Seq/Ack Tracer</button>
+                <button onclick="switchTool('stp')" class="tool-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-tool="stp">STP Bridge Election</button>
+                <button onclick="switchTool('vlan')" class="tool-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-tool="vlan">VLAN & Trunking Simulator</button>
+            </div>
+
+            <!-- Tool Container Panes -->
+            <div class="bg-carddark border border-slate-800 p-6 rounded-2xl">
+                <!-- Tool 1: IPv4 Subnet Calculator -->
+                <div id="tool-subnet" class="tool-pane space-y-4">
+                    <h3 class="text-lg font-bold text-white">IPv4 Subnet & CIDR Calculator</h3>
+                    <p class="text-xs text-slate-400">Enter an IP address and CIDR prefix to calculate network boundaries, subnet masks, and usable hosts.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">IP Address</label>
+                            <input type="text" id="sub-ip" value="192.168.10.50" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">CIDR Prefix</label>
+                            <select id="sub-cidr" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-accentcyan">
+                                <!-- Populated dynamically or static -->
+                                <option value="24">/24 (255.255.255.0 - 254 hosts)</option>
+                                <option value="25">/25 (255.255.255.128 - 126 hosts)</option>
+                                <option value="26">/26 (255.255.255.192 - 62 hosts)</option>
+                                <option value="27">/27 (255.255.255.224 - 30 hosts)</option>
+                                <option value="28">/28 (255.255.255.240 - 14 hosts)</option>
+                                <option value="29">/29 (255.255.255.248 - 6 hosts)</option>
+                                <option value="30">/30 (255.255.255.252 - 2 hosts)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="calculateSubnet()" class="w-full bg-accentcyan hover:bg-cyan-500 text-darknavy font-semibold py-2 px-4 rounded-xl text-sm transition">Calculate Subnet</button>
+                        </div>
+                    </div>
+                    <div id="sub-result" class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-xl text-sm space-y-2 font-mono">
+                        <span class="text-slate-500">Click calculate to view subnet breakdown and intermediate steps.</span>
+                    </div>
+                </div>
+
+                <!-- Tool 2: VLSM Allocator -->
+                <div id="tool-vlsm" class="tool-pane hidden space-y-4">
+                    <h3 class="text-lg font-bold text-white">VLSM Subnet Allocation Calculator</h3>
+                    <p class="text-xs text-slate-400">Allocate subnets from largest host requirement to smallest from a parent network.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Parent Network (e.g. 192.168.1.0/24)</label>
+                            <input type="text" id="vlsm-parent" value="192.168.1.0/24" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Required Host Counts (comma separated)</label>
+                            <input type="text" id="vlsm-hosts" value="50, 20, 10, 2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                        </div>
+                    </div>
+                    <button onclick="calculateVLSM()" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-semibold py-2 px-4 rounded-xl text-sm transition">Compute VLSM Allocation</button>
+                    <div id="vlsm-result" class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-xl text-sm space-y-2">
+                        <span class="text-slate-500">Enter host requirements and click compute.</span>
+                    </div>
+                </div>
+
+                <!-- Tool 3: TCP Seq/Ack Tracer -->
+                <div id="tool-tcp" class="tool-pane hidden space-y-4">
+                    <h3 class="text-lg font-bold text-white">TCP Handshake & Sequence Number Simulator</h3>
+                    <p class="text-xs text-slate-400">Simulate a 3-way handshake and track sequence/acknowledgement numbers during data transmission.</p>
+                    <div class="flex gap-3">
+                        <button onclick="runTcpSimulation()" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-semibold py-2 px-4 rounded-xl text-sm transition">Simulate 3-Way Handshake</button>
+                    </div>
+                    <div id="tcp-result" class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-xl text-sm space-y-3 font-mono">
+                        <span class="text-slate-500">Click simulate to step through SYN, SYN-ACK, and ACK packets.</span>
+                    </div>
+                </div>
+
+                <!-- Tool 4: STP Root Bridge Election -->
+                <div id="tool-stp" class="tool-pane hidden space-y-4">
+                    <h3 class="text-lg font-bold text-white">Spanning Tree Protocol (STP) Bridge ID Election</h3>
+                    <p class="text-xs text-slate-400">Compare Bridge Priorities and MAC addresses across switches to determine the Root Bridge.</p>
+                    <div id="stp-switches-container" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <div class="font-bold text-accentcyan mb-1">Switch A</div>
+                            <div class="text-xs text-slate-400">Priority: 32768</div>
+                            <div class="text-xs text-slate-400">MAC: 00-11-22-33-44-55</div>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <div class="font-bold text-accentcyan mb-1">Switch B</div>
+                            <div class="text-xs text-slate-400">Priority: 4096 (Lowest!)</div>
+                            <div class="text-xs text-slate-400">MAC: 00-AA-BB-CC-DD-EE</div>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <div class="font-bold text-accentcyan mb-1">Switch C</div>
+                            <div class="text-xs text-slate-400">Priority: 32768</div>
+                            <div class="text-xs text-slate-400">MAC: 00-FF-EE-DD-CC-BB</div>
+                        </div>
+                    </div>
+                    <button onclick="runStpElection()" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-semibold py-2 px-4 rounded-xl text-sm transition">Run Root Election</button>
+                    <div id="stp-result" class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-xl text-sm">
+                        <span class="text-slate-500">Run election to see step-by-step evaluation rules.</span>
+                    </div>
+                </div>
+
+                <!-- Tool 5: VLAN & Trunking Simulator -->
+                <div id="tool-vlan" class="tool-pane hidden space-y-4">
+                    <h3 class="text-lg font-bold text-white">802.1Q VLAN Tagging & Trunk Simulator</h3>
+                    <p class="text-xs text-slate-400">Simulate how switches inspect and tag frames traveling across trunk ports between distinct VLANs.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Source Host VLAN</label>
+                            <select id="vlan-source" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                                <option value="10">VLAN 10 (Engineering)</option>
+                                <option value="20">VLAN 20 (HR)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Port Type</label>
+                            <select id="vlan-porttype" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                                <option value="trunk">802.1Q Trunk Port</option>
+                                <option value="access">Access Port</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="simulateVlanTagging()" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-semibold py-2 px-4 rounded-xl text-sm transition">Simulate Frame Traversal</button>
+                    <div id="vlan-result" class="mt-4 p-4 bg-slate-900 border border-slate-800 rounded-xl text-sm font-mono">
+                        <span class="text-slate-500">Click simulate to trace frame headers and 4-byte 802.1Q tag insertion.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. EXAM SIMULATOR TAB -->
+        <section id="tab-exam" class="tab-content hidden space-y-6">
+            <div id="exam-start-view" class="bg-carddark border border-slate-800 p-8 rounded-2xl max-w-2xl mx-auto text-center space-y-4">
+                <div class="bg-accentcyan/10 w-16 h-16 mx-auto rounded-full flex items-center justify-center text-accentcyan text-2xl font-bold border border-accentcyan/30">📝</div>
+                <h2 class="text-2xl font-bold text-white">Networks & Switching Exam Simulator</h2>
+                <p class="text-sm text-slate-400">Test your mastery across multiple-choice, calculation, and scenario-based questions modeled after your written assessments. Includes timer tracking and detailed explanations.</p>
+                <div class="flex justify-center items-center space-x-4 py-2">
+                    <label class="text-xs text-slate-300 flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" id="exam-timer-toggle" checked class="rounded bg-slate-900 border-slate-700 text-accentcyan focus:ring-0">
+                        <span>Enable 15-Minute Countdown Timer</span>
+                    </label>
+                </div>
+                <button onclick="startExam()" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/25">Start Exam Simulation</button>
+            </div>
+
+            <!-- Active Exam Quiz View -->
+            <div id="exam-quiz-view" class="hidden max-w-3xl mx-auto space-y-6">
+                <div class="bg-carddark border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+                    <div id="exam-progress-indicator" class="text-sm font-semibold text-slate-300">Question 1 of 10</div>
+                    <div id="exam-timer-display" class="text-sm font-mono font-bold text-accentcyan bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">15:00</div>
+                </div>
+                <div id="exam-question-card" class="bg-carddark border border-slate-800 p-6 md:p-8 rounded-2xl space-y-4">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="flex justify-between">
+                    <button onclick="prevExamQuestion()" id="exam-prev-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm border border-slate-700 transition">Previous</button>
+                    <button onclick="nextExamQuestion()" id="exam-next-btn" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-bold px-6 py-2 rounded-xl text-sm transition">Next Question</button>
+                </div>
+            </div>
+
+            <!-- Exam Results View -->
+            <div id="exam-results-view" class="hidden max-w-2xl mx-auto bg-carddark border border-slate-800 p-8 rounded-2xl text-center space-y-6">
+                <div class="text-4xl font-extrabold text-accentcyan" id="exam-final-score">85%</div>
+                <h3 class="text-xl font-bold text-white">Exam Simulation Completed</h3>
+                <p id="exam-feedback-summary" class="text-sm text-slate-400">Great job! You demonstrated strong competency across core switching and routing concepts.</p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="reviewExamAnswers()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition">Review Answers</button>
+                    <button onclick="startExam()" class="bg-accentcyan hover:bg-cyan-500 text-darknavy font-bold px-5 py-2.5 rounded-xl text-sm transition">Retake New Set</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. REVISION CHECKLIST TAB -->
+        <section id="tab-checklist" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1">Syllabus Revision Checklist</h2>
+                <p class="text-sm text-slate-400">Track your confidence across every exam topic item extracted from your assessment revision list.</p>
+            </div>
+            <div id="checklist-container" class="bg-carddark border border-slate-800 p-6 rounded-2xl space-y-4">
+                <!-- Dynamically populated checklist items -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-carddark border-t border-slate-800 py-4 mt-auto text-center text-xs text-slate-500">
+        NetworkSwitch Exam Tutor &bull; Designed for Cybersecurity Degree Students &bull; Local Browser Storage Enabled
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
